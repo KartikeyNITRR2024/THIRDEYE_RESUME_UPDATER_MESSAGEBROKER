@@ -94,5 +94,52 @@ public class MessageServiceImpl implements MessageService {
         }
         log.info("Added {} messages to topic: {}", messages.size(), topicName);
     }
+    
+    @Override
+    public List<Message> getAiMessages(String topicName, String topicKey, Long count) {
+    	if(!topicName.equals("aiprocesser"))
+    	{
+    		log.error("Invalid topic request: {}, key: {}", topicName, topicKey);
+            throw new RuntimeException("Invalid message request");
+    	}
+        log.info("Fetching {} messages from topic: {}, key: {}", count, topicName, topicKey);
+        if (!topicService.isTopicPresent(topicName, topicKey)) {
+            log.error("Invalid topic request: {}, key: {}", topicName, topicKey);
+        }
+        if (topicService.isTopicEmpty(topicName)) {
+            log.warn("Topic {} is empty", topicName);
+            throw new RuntimeException("Topic is empty");
+        }
+        List<Message> messages = new ArrayList<>();
+        long present = Math.min(count, queueService.getSizeOfQueue(topicName));
+        for (long i = 0; i < present; i++) {
+            messages.add(queueService.getMessage(topicName));
+        }
+        log.info("Retrieved {} messages from topic: {}", messages.size(), topicName);
+        return messages;
+    }
+
+    @Override
+    public void setAiMessages(String topicName, String topicKey, List<Object> messages) {
+    	if(!topicName.equals("aiprocesser"))
+    	{
+    		log.error("Invalid topic request: {}, key: {}", topicName, topicKey);
+            throw new RuntimeException("Invalid message request");
+    	}
+        log.info("Adding {} messages to topic: {}, key: {}", messages.size(), topicName, topicKey);
+        if (!topicService.isTopicPresent(topicName, topicKey)) {
+            log.error("Invalid topic request: {}, key: {}", topicName, topicKey);
+            throw new RuntimeException("Invalid message request");
+        }
+        for (Object message : messages) {
+            Message newMessage = new Message(timeManager.getCurrentTime(), message);
+            if (topicService.isTopicFull(topicName)) {
+                log.warn("Topic {} is full, removing oldest message", topicName);
+                queueService.removeAndSetMessage(topicName, newMessage);
+            }
+            queueService.setMessage(topicName, newMessage);
+        }
+        log.info("Added {} messages to topic: {}", messages.size(), topicName);
+    }
 }
 

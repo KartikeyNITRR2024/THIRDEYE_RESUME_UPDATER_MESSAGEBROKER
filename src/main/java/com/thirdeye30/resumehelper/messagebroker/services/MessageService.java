@@ -13,5 +13,9 @@ public interface MessageService {
 	void setMessage(String topicName, String topicKey, Object message);
 	
 	void setMessages(String topicName, String topicKey, List<Object> messages);
+
+	List<Message> getAiMessages(String topicName, String topicKey, Long count);
+
+	void setAiMessages(String topicName, String topicKey, List<Object> messages);
 }
 

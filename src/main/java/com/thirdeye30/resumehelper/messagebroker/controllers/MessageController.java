@@ -61,4 +61,24 @@ public class MessageController {
         messageService.setMessages(topicName, topicKey, messages);
         return new ResponseEntity<>("Messages are added in topic", HttpStatus.CREATED);
     }
+    
+    @GetMapping("/aiintegreater/multiple/{topicname}/{topickey}/{count}")
+    public ResponseEntity<List<Message>> getAiMultipleMessage(
+            @PathVariable("topicname") String topicName, 
+            @PathVariable("topickey") String topicKey, 
+            @PathVariable("count") Long count) {
+        
+        List<Message> messages = messageService.getAiMessages(topicName, topicKey, count);
+        return ResponseEntity.ok(messages);
+    }
+    
+    @PostMapping("/aiintegreater/multiple/{topicname}/{topickey}")
+    public ResponseEntity<String> setAiMessages(
+            @PathVariable("topicname") String topicName, 
+            @PathVariable("topickey") String topicKey, 
+            @RequestBody List<Object> messages) {
+            
+        messageService.setAiMessages(topicName, topicKey, messages);
+        return new ResponseEntity<>("Messages are added in topic", HttpStatus.CREATED);
+    }
 }
