@@ -22,6 +22,7 @@ public class Initiatier {
         	topicService.addTopic("textextracter", 1000L);
         	topicService.addTopic("aiprocesser", 1000L);
         	topicService.addTopic("statusupdater", 1000L);
+        	topicService.addTopic("mailprocesser", 1000L);
         	isFirstTime = false;
         }
         log.info("Initiatier initialized.");
