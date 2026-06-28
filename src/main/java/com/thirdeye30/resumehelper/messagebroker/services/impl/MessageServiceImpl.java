@@ -97,7 +97,7 @@ public class MessageServiceImpl implements MessageService {
     
     @Override
     public List<Message> getAiMessages(String topicName, String topicKey, Long count) {
-    	if(!topicName.equals("aiprocesser"))
+    	if(!topicName.equals("aiprocesser") && !topicName.equals("aiprocesser2"))
     	{
     		log.error("Invalid topic request: {}, key: {}", topicName, topicKey);
             throw new RuntimeException("Invalid message request");
@@ -121,7 +121,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void setAiMessages(String topicName, String topicKey, List<Object> messages) {
-    	if(!topicName.equals("statusupdater"))
+    	if(!topicName.equals("statusupdater") && !topicName.equals("priorityskills"))
     	{
     		log.error("Invalid topic request: {}, key: {}", topicName, topicKey);
             throw new RuntimeException("Invalid message request");
